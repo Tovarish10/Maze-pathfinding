@@ -28,7 +28,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="README.md">
+    <None Include="..\.gitignore">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="..\README.md">
       <Filter>资源文件</Filter>
     </None>
   </ItemGroup>
