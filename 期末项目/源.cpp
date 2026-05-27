@@ -4,7 +4,7 @@
 
 int main() {
 	using namespace std;
-	auto map=graph({
+	auto map=maze({
 	{0,1,0,0,0,1,0},
 	{0,1,0,1,0,1,0},
 	{0,0,0,1,0,0,0},
@@ -22,4 +22,5 @@ int main() {
 		}
 		cout << endl;
 	}
+
 }
