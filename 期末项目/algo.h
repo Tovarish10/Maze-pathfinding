@@ -6,8 +6,8 @@
 #include<array>
 
 inline constexpr auto detect(const point& p,const maze& visited) {
-	std::array<point, 4> ans = { point{p.x + 1,p.y},point{p.x,p.y + 1},\
-		point{ p.x - 1,p.y  }, point{p.x,p.y - 1} };
+	std::array<point, 4> ans = { point{p.x,p.y + 1},point{p.x + 1,p.y},\
+		point{ p.x,p.y - 1 }, point{p.x - 1,p.y} };
 	for (auto&& i : ans)if (visited(i))i = point{ 0,0 };
 	return ans;
 }

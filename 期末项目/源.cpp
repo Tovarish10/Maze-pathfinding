@@ -3,12 +3,16 @@
 #include<iostream>
 int main() {
 	using namespace std;
-	auto map=maze({
-	{0,1,0,0,0,1,0},
-	{1,1,0,1,0,1,0},
-	{0,0,0,1,0,0,0},
-	{1,1,0,1,1,0,1},
-	{0,1,1,1,1,0,0},
+	auto map = maze({
+		{0,0,1,0,0,0,1,0},
+		{0,0,1,0,0,0,1,0},
+		{0,0,0,0,1,1,0,1},
+		{0,1,1,1,0,0,1,0},
+		{0,0,0,1,0,0,0,0},
+		{0,1,0,0,0,1,0,1},
+		{0,1,1,1,1,0,0,1},
+		{1,1,0,0,0,1,0,1},
+		{1,1,0,0,0,0,0,0},
 		});
 	auto solution = dfs_OSstack(map);
 	auto ans = solution.get_ans();
@@ -17,7 +21,8 @@ int main() {
 			cout << comma << j;
 			comma[0] = ' ';
 		}
+		cout << '\n';
+		render_route(cout, map, i);
 		cout << endl;
 	}
-	render_route(cout, map, ans[0]);
 }

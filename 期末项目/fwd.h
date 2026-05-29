@@ -9,7 +9,6 @@ using graph_t = std::vector<std::vector<T>>;
 
 struct point {
 	size_t x, y;
-	//point(std::initializer_list<size_t> pos):x(pos.data()[0]),y(pos.data()[1]){}
 	inline auto operator<=>(const point&)const = default;
 	template<typename charT, typename traits>
 	friend std::basic_ostream<charT, traits>& \
@@ -18,11 +17,6 @@ struct point {
 		return os;
 	}
 };
-//struct point_p:point
-//{
-//	point prev;
-//	point_p(const point& pos,const point& prev):point(pos),prev(prev){}
-//};
 class maze {
 	graph_t<> board;
 public:
