@@ -1,17 +1,14 @@
 #include"fwd.h"
 #include"algo.h"
 #include<iostream>
-
 int main() {
 	using namespace std;
 	auto map=maze({
 	{0,1,0,0,0,1,0},
-	{0,1,0,1,0,1,0},
+	{1,1,0,1,0,1,0},
 	{0,0,0,1,0,0,0},
 	{1,1,0,1,1,0,1},
-	{0,0,0,0,0,0,0},
-	{0,1,1,1,1,1,0},
-	{0,0,0,0,0,0,0}
+	{0,1,1,1,1,0,0},
 		});
 	auto solution = dfs_OSstack(map);
 	auto ans = solution.get_ans();
@@ -22,5 +19,5 @@ int main() {
 		}
 		cout << endl;
 	}
-
+	render_route(cout, map, ans[0]);
 }
