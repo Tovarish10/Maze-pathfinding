@@ -48,6 +48,7 @@ public:
 	inline std::vector<bool>::reference operator()(point p) { return board[p.x][p.y]; }
 };
 
+
 namespace Signals {
 	const char RESET[] = "\x1b[0m";
 	const char GREEN[] = "\x1b[32m";
@@ -55,37 +56,44 @@ namespace Signals {
 
 	const char BLANK[] = "  ";
 	const char WALL[] = "\x1b[47m  \x1b[0m";
-	const char LEFT[] = "\x1b[32m-\u2190\x1b[0m";
+	const char LEFT[] = "\x1b[32m\u2190-\x1b[0m";
 	const char UP[] = "\x1b[32m\u2191\u2191\x1b[0m";
 	const char RIGHT[] = "\x1b[32m-\u2192\x1b[0m";
 	const char DOWN[] = "\x1b[32m\u2193\u2193\x1b[0m";
 
 }
-template<class A, class B>
-auto render_route(std::basic_ostream<A, B>& os, const maze& graph, const std::vector<point>& route) {
-	graph_t<const char*> rendergraph(graph.dst.x + 2, std::vector<const char*>(graph.dst.y + 2));
-	for (auto i = 0; i < graph.dst.x + 2; ++i) {
-		for (auto j = 0; j < graph.dst.y + 2; ++j)
-		{
-			rendergraph[i][j] = graph(i, j) ? Signals::WALL : Signals::BLANK;
-		}
-	}
-	if (route.size() > 1) {
-		auto j = route.begin();
-		for (auto&& i = std::next(route.begin()); i < route.end(); ++i) {
-			switch ((i->y - j->y + 1) * 2 + (i->x - j->x)) {
-			case 0:rendergraph[i->x][i->y] = Signals::LEFT; break;
-			case 1:rendergraph[i->x][i->y] = Signals::UP; break;
-			case 3:rendergraph[i->x][i->y] = Signals::DOWN; break;
-			case 4:rendergraph[i->x][i->y] = Signals::RIGHT; break;
+struct __mapandroute {
+	const maze& graph;
+	const std::vector<point>& route;
+
+	template<class A, class B>
+	friend auto& operator<<(std::basic_ostream<A, B>& os,__mapandroute structor) {
+		graph_t<const char*> rendergraph(structor.graph.dst.x + 2, std::vector<const char*>(structor.graph.dst.y + 2));
+		for (auto i = 0; i < structor.graph.dst.x + 2; ++i) {
+			for (auto j = 0; j < structor.graph.dst.y + 2; ++j)
+			{
+				rendergraph[i][j] = structor.graph(i, j) ? Signals::WALL : Signals::BLANK;
 			}
-			j = i;
 		}
+		if (structor.route.size() > 1) {
+			auto j = structor.route.begin();
+			for (auto&& i = std::next(structor.route.begin()); i < structor.route.end(); ++i) {
+				switch ((i->y - j->y + 1) * 2 + (i->x - j->x)) {
+				case 0:rendergraph[i->x][i->y] = Signals::LEFT; break;
+				case 1:rendergraph[i->x][i->y] = Signals::UP; break;
+				case 3:rendergraph[i->x][i->y] = Signals::DOWN; break;
+				case 4:rendergraph[i->x][i->y] = Signals::RIGHT; break;
+				}
+				j = i;
+			}
+		}
+		rendergraph[1][1] = "\x1b[41m  \x1b[0m";
+		rendergraph[structor.graph.dst.x][structor.graph.dst.y] = "\x1b[42m  \x1b[0m";
+		for (auto&& i : rendergraph) {
+			for (auto&& j : i) os << j;
+			os << '\n';
+		}
+		return os;
 	}
-	rendergraph[1][1] = "\x1b[41m  \x1b[0m";
-	rendergraph[graph.dst.x][graph.dst.y] = "\x1b[42m  \x1b[0m";
-	for (auto&& i : rendergraph) {
-		for (auto&& j : i) os << j;
-		os << '\n';
-	}
-}
+};
+inline auto route(const maze& graph, const std::vector<point>& __route) { return __mapandroute{graph,__route}; }
